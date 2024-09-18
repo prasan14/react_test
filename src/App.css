@@ -1,0 +1,21 @@
+.App {
+  text-align: center;
+}
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dropdownBox{
+  margin-top: 2rem;
+}
+.error{
+  color: red;
+  font-weight: 400;
+  font-size: 14px;
+  display: block;
+}
+.dropdownSelect{
+  margin-bottom: 10px;
+}
