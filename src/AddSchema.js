@@ -7,6 +7,7 @@ function AddSchema({setOpen,segmentName,setNameError}) {
     const [schema,setSchema] = useState([]);
     const [schemaSelected, setSchemaSelected] = useState("");
     const [error, setError] = useState("");
+    const [submitError, setSubmitError] = useState("");
     const initial_options = [
         { value: 'first_name', label: 'First Name' },
         { value: 'last_name', label: 'Last Name' },
@@ -55,10 +56,15 @@ function AddSchema({setOpen,segmentName,setNameError}) {
             setNameError(true)
         }
         else{
-            fetch('	https://webhook.site/77255e18-c07b-48d2-9c67-cc05dcfddcb3', {
+            const schemas = schema?.map((schema) => ({
+                [schema.schemas.value]: schema.schemas.label
+              }));
+            fetch('https://webhook.site/77255e18-c07b-48d2-9c67-cc05dcfddcb3', {
                 method: 'POST',
+                mode: 'no-cors',
                 body: JSON.stringify({
-                    test: 'TEst'
+                    "segment_name": segmentName,
+                    "schema":schemas
                 }),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
@@ -83,6 +89,7 @@ function AddSchema({setOpen,segmentName,setNameError}) {
             }
             <Select options={options} placeholder="Add schema to segment" onChange={(schema)=>{setError(false);setSchemaSelected(schema)}} value={schemaSelected} />
             {error && <span className="error">Select any one Schema to add</span>}
+            {submitError && <span className="error">Add Atlest one schema to the segment</span>}
             <Link underline="always" variant="plain" onClick={handleClick} sx={{fontWeight: 500,marginTop:2}}>+ Add new schema</Link>
         </div>
         <Box
