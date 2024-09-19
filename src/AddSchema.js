@@ -7,7 +7,8 @@ function AddSchema({setOpen,segmentName,setNameError}) {
     const [schema,setSchema] = useState([]);
     const [schemaSelected, setSchemaSelected] = useState("");
     const [error, setError] = useState("");
-    const [submitError, setSubmitError] = useState("");
+    const [success, setSuccess] = useState(false);
+    const [submitError, setSubmitError] = useState({status: false, message:''});
     const initial_options = [
         { value: 'first_name', label: 'First Name' },
         { value: 'last_name', label: 'Last Name' },
@@ -20,8 +21,9 @@ function AddSchema({setOpen,segmentName,setNameError}) {
     const [options,setOptions] = useState(initial_options);
 
     const handleClick = () => {
+        setSubmitError({status:false, message:''});
         if(schemaSelected){
-            setError(false)
+            setError(false);
             setSchema(previousSchema=>[...previousSchema, {id:Date.now(),schemas:schemaSelected}]);
             setSchemaSelected("");
         }
@@ -52,10 +54,18 @@ function AddSchema({setOpen,segmentName,setNameError}) {
         }));
     }
     const handleSubmit = () => {
+        setSuccess(false)
         if(!segmentName){
             setNameError(true)
         }
+        else if(schema.length === 0){
+            setSubmitError({status:true, message:'Add atleast one schema to the segment'});
+        }
+        else if(schemaSelected !== ""){
+            setSubmitError({status:false, message: 'Add the selected schema to the segment'})
+        }
         else{
+            setSubmitError(false);
             const schemas = schema?.map((schema) => ({
                 [schema.schemas.value]: schema.schemas.label
               }));
@@ -67,12 +77,15 @@ function AddSchema({setOpen,segmentName,setNameError}) {
                     "schema":schemas
                 }),
                 headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
+                    'Content-type': 'application/json;',
                 },
                 })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log("Data submitted successfully")
+                .then((response) => {
+                    if(response){
+                        setSuccess(true);
+                        console.log("Segment Saved Successfully");
+                        
+                    }
                 })
                 .catch((err) => {
                     console.log(err.message);
@@ -89,8 +102,9 @@ function AddSchema({setOpen,segmentName,setNameError}) {
             }
             <Select options={options} placeholder="Add schema to segment" onChange={(schema)=>{setError(false);setSchemaSelected(schema)}} value={schemaSelected} />
             {error && <span className="error">Select any one Schema to add</span>}
-            {submitError && <span className="error">Add Atlest one schema to the segment</span>}
+            {submitError && <span className="error">{submitError.message}</span>}
             <Link underline="always" variant="plain" onClick={handleClick} sx={{fontWeight: 500,marginTop:2}}>+ Add new schema</Link>
+            {success && <span className="success">Segment Saved Successfully!</span>}
         </div>
         <Box
             sx={{

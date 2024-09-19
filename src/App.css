@@ -16,6 +16,12 @@
   font-size: 14px;
   display: block;
 }
+.success{
+  color: green;
+  font-weight: 400;
+  font-size: 14px;
+  display: block;
+}
 .dropdownSelect{
   margin-bottom: 10px;
 }
