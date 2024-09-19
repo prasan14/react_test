@@ -72,7 +72,7 @@ function AddSchema({setOpen,segmentName,setNameError}) {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("Olkay")
+                    console.log("Data submitted successfully")
                 })
                 .catch((err) => {
                     console.log(err.message);
